@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced To-Do List</title>
+    <style id="custom-theme">
+        /* Your existing styles here */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #3498db, #6c5ce7);
+            color: #fff;
+        }
+
+        header {
+            background-color: #2c3e50;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #todo-container {
+            flex: 1;
+            width: 400px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 20px auto;
+            box-sizing: border-box;
+        }
+
+        #todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .todo-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .delete-button {
+            cursor: pointer;
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
+            width: 60%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #000; /* Set color to black */
+        }
+
+        button {
+            padding: 10px 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            padding: 10px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        /* New styles for priority feature */
+        select {
+            width: 60%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #000;
+        }
+        /* New styles for custom theme */
+        body {
+            background: linear-gradient(to right, #3498db, #6c5ce7);
+        }
+
+        header {
+            background-color: #2c3e50;
+        }
+
+        nav a {
+            color: #fff;
+        }
+
+        #todo-container {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .todo-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #3498db;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            background-color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Enhanced To-Do List</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <div id="todo-container">
+        <h2>Your To-Do List</h2>
+        <ul id="todo-list"></ul>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="new-task" placeholder="New task">
+            <input type="date" id="task-date">
+            <input type="time" id="task-time">
+            
+            <!-- Priority dropdown menu -->
+            <select id="priority-select">
+                <option value="low">Low</option>
+                <option value="normal" selected>Normal</option>
+                <option value="high">High</option>
+            </select>
+
+            <button onclick="addTask()">Add Task</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Enhanced To-Do List. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Your existing JavaScript code here
+
+        function addTask() {
+            var taskInput = document.getElementById('new-task');
+            var taskDateInput = document.getElementById('task-date');
+            var taskTimeInput = document.getElementById('task-time');
+            var prioritySelect = document.getElementById('priority-select');
+
+            var taskText = taskInput.value.trim();
+            var taskDate = taskDateInput.value;
+            var taskTime = taskTimeInput.value;
+            var taskPriority = prioritySelect.value;
+
+            if (taskText === '') {
+                alert('Please enter a task.');
+                return;
+            }
+
+            var todoList = document.getElementById('todo-list');
+
+            var listItem = document.createElement('li');
+            listItem.className = 'todo-item';
+
+            var taskTextElement = document.createElement('span');
+            taskTextElement.textContent = taskText;
+
+            var dateTimeElement = document.createElement('div');
+            dateTimeElement.textContent = formatDateTime(taskDate, taskTime);
+            dateTimeElement.style.fontSize = '14px';
+
+            var priorityElement = document.createElement('div');
+            priorityElement.textContent = `Priority: ${taskPriority}`;
+            priorityElement.style.fontSize = '14px';
+
+            var deleteButton = document.createElement('span');
+            deleteButton.textContent = '❌';
+            deleteButton.className = 'delete-button';
+            deleteButton.onclick = function () {
+                listItem.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(function () {
+                    listItem.remove();
+                }, 300);
+            };
+
+            listItem.appendChild(taskTextElement);
+            listItem.appendChild(dateTimeElement);
+            listItem.appendChild(priorityElement);
+            listItem.appendChild(deleteButton);
+
+            todoList.appendChild(listItem);
+
+            // Schedule notification
+            scheduleNotification(taskText, taskDate, taskTime);
+
+            taskInput.value = '';
+            taskDateInput.value = '';
+            taskTimeInput.value = '';
+            prioritySelect.value = 'normal'; // Reset priority to default after adding a task
+        }
+
+        function formatDateTime(date, time) {
+            var formattedDate = new Date(date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            });
+
+            return `${formattedDate} at ${time}`;
+        }
+
+        function scheduleNotification(taskText, taskDate, taskTime) {
+            var dateTime = new Date(`${taskDate} ${taskTime}`);
+            var currentTime = new Date();
+
+            var timeDiff = dateTime.getTime() - currentTime.getTime();
+            var fiveMinutesBefore = timeDiff - 5 * 60 * 1000; // 5 minutes in milliseconds
+
+            if (fiveMinutesBefore > 0) {
+                setTimeout(function () {
+                    showNotification(`Reminder: ${taskText}`, 'Your task is starting soon!');
+                }, fiveMinutesBefore);
+            }
+        }
+
+        function showNotification(title, body) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, { body });
+            } else if ('Notification' in window && Notification.permission !== 'denied') {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === 'granted') {
+                        new Notification(title, { body });
+                    }
+                });
+            }
+        }
+
+        // New function for custom theme
+        function setCustomTheme(themeColors) {
+            var customThemeStyle = document.getElementById('custom-theme');
+            customThemeStyle.innerHTML = themeColors;
+        }
+
+        // Example usage: setCustomTheme('body { background-color: #222; color: #fff; }');
+    </script>
+</body>
+</html>
